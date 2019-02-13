@@ -6,7 +6,7 @@
 trigger:
 - master
 
-pool: Default
+pool: Shreyas
 
 steps:
 - script: npm install
