@@ -1,0 +1,13 @@
+{
+  "name": "jesttests1",
+  "version": "1.0.0",
+  "description": "sample set of jest tests",
+  "scripts": {
+    "test": "jest"
+  },
+  "devDependencies": {
+    "jest": "^23.6.0"
+  },
+  "author": "ShreyasRMsft",
+  "license": "MIT"
+}
