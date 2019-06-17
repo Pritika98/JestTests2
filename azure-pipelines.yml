@@ -6,13 +6,33 @@
 trigger:
 - master
 
-pool: Default
+variables:
+  agent.disablelogplugin.TestResultLogPlugin: 'false'
+  skipComponentGovernanceDetection: 'true'
+  imageRepository: 'test2'
+  containerRegistry: 'dockerazure.azurecr.io'
+  dockerfilePath: '**/Dockerfile'
+  tag: '$(Build.BuildId)'
+  imgName: '$(containerRegistry)/$(imageRepository):$(tag)'
+  vmImageName: 'windows-latest'
 
-variables: { agent.disablelogplugin.TestResultLogPlugin: 'false' }
-
-steps:
-- script: npm install
-  displayName: 'npm install'
-
-- script: npm run test
-  displayName: 'npm test'
+stages:
+- stage: Build
+  displayName: Build and push stage
+  jobs:  
+  - job: Build
+    displayName: Build job
+    pool: Default
+    steps:
+    - task: Docker@2
+      displayName: Login to ACR
+      inputs:
+        command: login
+        containerRegistry: 'dockerazure'
+    - task: Docker@2
+      inputs:
+        containerRegistry: 'dockerazure'
+        command: 'build'
+        Dockerfile: '**/Dockerfile'
+    - script: |
+          docker run $(imgName)
